@@ -15,6 +15,8 @@ int main(int argc, char ** argv)
 {
     ros::init(argc, argv, "main_test");
     ros::NodeHandle nh;
+    ros::AsyncSpinner spinner(2);
+    spinner.start();
 
     ros::Publisher circlePublisher = nh.advertise<ar_cv::CircleInfo>("/ar_cv/circle_info", 8);
 
@@ -63,8 +65,8 @@ int main(int argc, char ** argv)
         }
         cv::waitKey(1);
     }
-    // spinner.start();
-    // ros::waitForShutdown();
+
+    ros::waitForShutdown();
 }
 
 std::vector<ar_cv::CircleInfo> findCircles(cv::Mat & frame, const cv::Scalar & lowColor, const cv::Scalar & highColor, double sigma) {

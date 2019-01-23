@@ -22,6 +22,7 @@ SimpleCV::SimpleCV(ros::NodeHandle & nh, CameraWorkingInfo info, int frequency)
         case 3: // Topic
             std::cout << "[Simple CV] Start topic Subscriber: " << info.topicName << std::endl;
             cameraSubscriber = nh.subscribe(info.topicName, 10, &SimpleCV::imageCallback, this);
+            ros::Duration(1).sleep();
             break;
         default:
             std::cout << "[Simple CV] Work Mode is not correct!" << std::endl;

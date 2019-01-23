@@ -32,7 +32,7 @@ generate_messages (
 
 catkin_package (
     # INCLUDE_DIRS include
-    # LIBRARIES ar_cv
+    LIBRARIES ar_cv
     CATKIN_DEPENDS message_runtime
     # DEPENDS system_lib
 )
@@ -42,9 +42,25 @@ include_directories (
     ${catkin_INCLUDE_DIRS}
 )
 
-add_executable(main_test test/MainTest.cpp src/SimpleCV.cpp)
-target_link_libraries(main_test
+add_library(ar_cv src/SimpleCV.cpp)
+target_link_libraries(ar_cv
     ${catkin_LIBRARIES}
     ${OpenCV_LIBS}
     ${Boost_LIBRARIES}
+)
+
+add_executable(main_test test/MainTest.cpp)
+target_link_libraries(main_test ar_cv)
+
+
+#install binary and lib
+install(TARGETS ar_cv
+  ARCHIVE DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
+  LIBRARY DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
+  RUNTIME DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
+)
+
+#copy header files
+install(DIRECTORY include/ar_cv/
+  DESTINATION ${CATKIN_PACKAGE_INCLUDE_DESTINATION}
 )

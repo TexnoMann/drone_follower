@@ -4,6 +4,7 @@
 #include <cmath>
 #include <eigen3/Eigen/Geometry>
 #include <iostream>
+#include <vector>
 
 class DroneController{
 public:

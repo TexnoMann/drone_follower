@@ -31,10 +31,9 @@ generate_messages (
 )
 
 catkin_package (
-    # INCLUDE_DIRS include
+    INCLUDE_DIRS include
     LIBRARIES ar_cv
     CATKIN_DEPENDS message_runtime
-    # DEPENDS system_lib
 )
 
 include_directories (

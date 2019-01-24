@@ -5,7 +5,6 @@ project(ardrone_control)
 add_compile_options(-std=c++11)
 
 find_package(catkin REQUIRED COMPONENTS
-  message_generation
   roscpp
   std_msgs
   geometry_msgs
@@ -14,6 +13,7 @@ find_package(catkin REQUIRED COMPONENTS
 find_package(Eigen3 3.3 REQUIRED NO_MODULE)
 
 catkin_package(
+  INCLUDE_DIRS include
   LIBRARIES ardrone_control
 )
 

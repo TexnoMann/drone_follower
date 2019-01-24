@@ -5,10 +5,12 @@ project(ardrone_system)
 # add_compile_options(-std=c++11)
 
 find_package(catkin REQUIRED COMPONENTS
-  message_generation
   roscpp
   std_msgs
   geometry_msgs
+  ardrone_control
+  ${ar_cv}
+  ${ardrone_control}
 )
 find_package(Curses REQUIRED)
 

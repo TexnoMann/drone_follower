@@ -1,4 +1,4 @@
-#include "DroneController.h"
+#include "ardrone_control/DroneController.h"
 
 
 DroneController::DroneController(double limAngleCam, double Kx, double Ky, double Kz, double YSizeCam, double ZSizeCam){
@@ -17,7 +17,7 @@ DroneController::DroneController(double limAngleCam, double Kx, double Ky, doubl
   this->_xOffset=0.21;
 }
 
-std::vector<float> DroneController::getVectorControl(double heighDrone, Eigen::Vector3d xyzrObject, double alphaDrone, double phiDrone, Eigen::Vector3d desiredVector){
+std::vector<float> DroneController::getVectorControl(double heighDrone, Eigen::Vector4d xyzrObject, double alphaDrone, double phiDrone, Eigen::Vector3d desiredVector){
   std::vector<float> controlv(4);
   Eigen::Vector3d control=_controlMatrix*(desiredVector-_getCurrentVector(heighDrone,xyzrObject,alphaDrone,phiDrone));
   //Chech overcontrol
@@ -34,10 +34,10 @@ std::vector<float> DroneController::getVectorControl(double heighDrone, Eigen::V
 
 
 //Get vector to object of base frame on drone
-Eigen::Vector3d DroneController::_getCurrentVector(double heighDrone, Eigen::Vector3d xyzrObject, double alphaDrone, double phiDrone){
+Eigen::Vector3d DroneController::_getCurrentVector(double heighDrone, Eigen::Vector4d xyzrObject, double alphaDrone, double phiDrone){
   Eigen::Vector3d currentVector;
-  double angle_y=-(xyzrObject[1]/_YSizeCam*_limAngleCam*2-_limAngleCam);
-  double angle_x=-(xyzrObject[2]/_ZSizeCam*_limAngleCam*2-_limAngleCam);
+  double angle_y=-((xyzrObject[1]+_YSizeCam/2)/_YSizeCam*_limAngleCam*2-_limAngleCam);
+  double angle_x=-((xyzrObject[2]+_ZSizeCam/2)/_ZSizeCam*_limAngleCam*2-_limAngleCam);
   std::cout<<angle_x*180/3.14<<" "<< angle_y*180/3.14<<"\n";
   currentVector[0]=heighDrone/tan(angle_x)+_xOffset;
   currentVector[1]=(currentVector[0]-_xOffset)*tan(angle_y);

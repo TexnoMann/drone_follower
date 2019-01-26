@@ -22,7 +22,13 @@ include_directories(
 )
 
 add_executable(move src/ardrone.cpp)
+add_executable(test_cv src/test_cv.cpp)
 target_link_libraries(move
+  ${catkin_LIBRARIES}
+  ${CURSES_LIBRARIES}
+)
+
+target_link_libraries(test_cv
   ${catkin_LIBRARIES}
   ${CURSES_LIBRARIES}
 )

@@ -9,8 +9,8 @@ find_package(catkin REQUIRED COMPONENTS
   std_msgs
   geometry_msgs
   ardrone_control
-  ${ar_cv}
-  ${ardrone_control}
+  ar_cv
+  ardrone_control
 )
 find_package(Curses REQUIRED)
 

@@ -17,9 +17,13 @@ DroneController::DroneController(double limAngleCam, double Kx, double Ky, doubl
   this->_xOffset=0.21;
 }
 
-std::vector<float> DroneController::getVectorControl(double heighDrone, Eigen::Vector4d xyzrObject, double alphaDrone, double phiDrone, Eigen::Vector3d desiredVector){
+std::vector<float> DroneController::getVectorControl(double heighDrone, std::vector<double> xyzrObjectV, double alphaDrone, double phiDrone, std::vector<double> desiredVector){
+
+  Eigen::Vector4d xyzrObject={xyzrObjectV[0],xyzrObjectV[1],xyzrObjectV[2],xyzrObjectV[3]};
+  Eigen::Vector3d desV={desiredVector[0],desiredVector[1],desiredVector[2]};
+
   std::vector<float> controlv(4);
-  Eigen::Vector3d control=_controlMatrix*(desiredVector-_getCurrentVector(heighDrone,xyzrObject,alphaDrone,phiDrone));
+  Eigen::Vector3d control=_controlMatrix*(desV-_getCurrentVector(heighDrone,xyzrObject,alphaDrone,phiDrone));
   //Chech overcontrol
   for(int i=0; i<3;i++){
     if(control[i]>_maxControlVector[i]){
@@ -29,6 +33,9 @@ std::vector<float> DroneController::getVectorControl(double heighDrone, Eigen::V
   }
   controlv[3]=0.0;
 
+  #ifdef DEBUG
+  std::cout<<controlv[0]<<"\n";
+  #endif
   return controlv;
 }
 
@@ -38,11 +45,12 @@ Eigen::Vector3d DroneController::_getCurrentVector(double heighDrone, Eigen::Vec
   Eigen::Vector3d currentVector;
   double angle_y=-((xyzrObject[1]+_YSizeCam/2)/_YSizeCam*_limAngleCam*2-_limAngleCam);
   double angle_x=-((xyzrObject[2]+_ZSizeCam/2)/_ZSizeCam*_limAngleCam*2-_limAngleCam);
-  std::cout<<angle_x*180/3.14<<" "<< angle_y*180/3.14<<"\n";
   currentVector[0]=heighDrone/tan(angle_x)+_xOffset;
   currentVector[1]=(currentVector[0]-_xOffset)*tan(angle_y);
   currentVector[2]=-heighDrone;
-  std::cout<<currentVector<<"\n";
+  #ifdef DEBUG
+  std::cout<<"Vector for Object: \n"<<currentVector<<"\n";
+  #endif
   currentVector=_getTransformRotMatrix(alphaDrone, phiDrone).inverse()*currentVector;
 
   return currentVector;

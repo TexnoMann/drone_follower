@@ -5,7 +5,7 @@ project(ar_cv)
 add_compile_options(-std=c++11)
 
 # Debug option
-# ADD_DEFINITIONS(-DDEBUG)
+ ADD_DEFINITIONS(-DDEBUG)
 
 find_package(catkin REQUIRED COMPONENTS
     cv_bridge

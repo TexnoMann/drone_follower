@@ -9,7 +9,7 @@
 class DroneController{
 public:
   DroneController(double limAngleCam, double Kx, double Ky, double Kz, double YSizeCam, double ZSizeCam);
-  std::vector<float> getVectorControl(double heighDrone, Eigen::Vector4d xyzrObject, double alphaDrone, double phiDrone, Eigen::Vector3d desiredVector);
+  std::vector<float> getVectorControl(double heighDrone, std::vector<double> xyzrObject, double alphaDrone, double phiDrone, std::vector<double> desiredVector);
 private:
   double _limAngleCam;
   double _Kx;

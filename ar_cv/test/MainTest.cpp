@@ -43,7 +43,7 @@ int main(int argc, char ** argv)
     cv::Scalar minColor(mincolor[0], mincolor[1], mincolor[2]),
                maxColor(maxcolor[0], maxcolor[1], maxcolor[2]);
 
-    if (info.topicName == "")
+    if (info.topicName == "/ardrone/front/image_raw")
         info.workMode = 2;      // Config for web camera
     else info.workMode = 3;     // Config for topic
 

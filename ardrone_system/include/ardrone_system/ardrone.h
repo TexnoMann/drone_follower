@@ -1,5 +1,4 @@
 #include <ros/ros.h>
-#include <ncurses.h>
 #include <geometry_msgs/Twist.h>
 #include <std_msgs/Empty.h>
 

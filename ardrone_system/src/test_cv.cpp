@@ -1,5 +1,7 @@
+#include <ardrone_system/ardrone.h>
 #include <ar_cv/SimpleCV.hpp>
 #include <ar_cv/algorithms.hpp>
+#include <ardrone_control/DroneController.h>
 
 
 int DILATION_SIZE = 0;
@@ -7,6 +9,8 @@ int BLUR_SIZE = 0;
 
 cv::Scalar circleColor(255, 255, 255), contourColor(0, 255, 0);
 //cv::Scalar minColor(98, 140, 140), maxColor(218, 255, 255);
+drone ar;
+DroneController ctrl(0.802, 0.1, 0.1, 0.1, 1280.0, 720.0);
 
 int main(int argc, char ** argv)
 {
@@ -43,7 +47,7 @@ int main(int argc, char ** argv)
     cv::Scalar minColor(mincolor[0], mincolor[1], mincolor[2]),
                maxColor(maxcolor[0], maxcolor[1], maxcolor[2]);
 
-    if (info.topicName == "")
+    if (info.topicName == "/ardrone/front/image_raw")
         info.workMode = 2;      // Config for web camera
     else info.workMode = 3;     // Config for topic
 
@@ -52,7 +56,6 @@ int main(int argc, char ** argv)
     SimpleCV cv(nh, info, freq);
     cv::Mat image;
     int ch ;
-    initscr();
     while(ros::ok()) {
         image = cv.getImage().clone();
         if (!image.empty()) {
@@ -61,36 +64,23 @@ int main(int argc, char ** argv)
             circles = findCircles(image, minColor, maxColor, accurancy,
                 DILATION_SIZE, BLUR_SIZE, circleColor, contourColor);
 
-            if (circles.size() > 0 && )
+            if (circles.size() > 0){
 
                 circlePublisher.publish(circles[0]);
+
+                std::vector<double> v=getCircleInfoForControl(circles[0]);
+                std::cout<<v[0]<<" "<<v[1]<<" "<<v[2]<<" "<<v[3]<<"\n";
+                std::vector<double> desVector={2,0,-1,0};
+                ctrl.getVectorControl(1,v,0,0,desVector);
+                //ar.drone_move(x,y,z,zz);
+            }
 
             #ifdef DEBUG
             cv::imshow("Image", image);
             #endif
         }
         cv::waitKey(1);
-
-        ar.drone_move(x,y,z,zz);
     }
 
     ros::waitForShutdown();
-}
-
-void takeoffCallback(const std_msgs::String::ConstPtr  msg))
-{
-
-    try {
-        cv_ptr = cv_bridge::toCvCopy(msg, sensor_msgs::image_encodings::BGR8);
-    }
-    catch (cv_bridge::Exception& e) {
-        ROS_ERROR("cv_bridge exception: %s", e.what());
-        ros::shutdown();
-    }
-
-    image = cv_ptr->image;
-    // if (camWidth == 0 || camHeight == 0) {
-    //     camWidth = image.cols; camHeight = image.rows;
-    // }
-    // ros::Duration(round(1/freq)).sleep();
 }

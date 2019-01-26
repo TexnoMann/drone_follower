@@ -1,5 +1,5 @@
 #include <ardrone_system/ardrone.h>
-#include <ardrone_control/DroneController.h>
+#include <ncurses.h>
 
 int main(int argc, char **argv){
 	int ch ;

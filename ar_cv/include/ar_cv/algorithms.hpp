@@ -72,3 +72,12 @@ std::vector<ar_cv::CircleInfo> findCircles(cv::Mat & frame, const cv::Scalar & l
     #endif
     return info;
 }
+
+std::vector<double> getCircleInfoForControl(ar_cv::CircleInfo info){
+    std::vector<double> vectorForControl(4);
+    vectorForControl[0]=(double)info.center.x;
+    vectorForControl[1]=(double)info.center.y;
+    vectorForControl[2]=(double)info.center.z;
+    vectorForControl[3]=(double)info.diameter;
+    return vectorForControl;
+}

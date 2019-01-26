@@ -4,6 +4,9 @@ project(ardrone_control)
 ## Compile as C++11, supported in ROS Kinetic and newer
 add_compile_options(-std=c++11)
 
+# Debug option
+ ADD_DEFINITIONS(-DDEBUG)
+
 find_package(catkin REQUIRED COMPONENTS
   roscpp
   std_msgs

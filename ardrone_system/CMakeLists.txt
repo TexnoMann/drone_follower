@@ -10,7 +10,6 @@ find_package(catkin REQUIRED COMPONENTS
   geometry_msgs
   ardrone_control
   ar_cv
-  ardrone_control
 )
 find_package(Curses REQUIRED)
 
@@ -24,11 +23,15 @@ include_directories(
 add_executable(move src/ardrone.cpp)
 add_executable(test_cv src/test_cv.cpp)
 target_link_libraries(move
+  ${ar_cv_LIBRARIES}
+  ${ardrone_control_LIBRARIES}
   ${catkin_LIBRARIES}
   ${CURSES_LIBRARIES}
 )
 
 target_link_libraries(test_cv
+  ${ar_cv_LIBRARIES}
+  ${ardrone_control_LIBRARIES}
   ${catkin_LIBRARIES}
   ${CURSES_LIBRARIES}
 )

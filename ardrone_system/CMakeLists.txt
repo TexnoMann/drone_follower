@@ -9,9 +9,12 @@ find_package(catkin REQUIRED COMPONENTS
   std_msgs
   geometry_msgs
   ardrone_control
+  ardrone_autonomy
   ar_cv
 )
 find_package(Curses REQUIRED)
+
+find_package(OpenCV REQUIRED)
 
 catkin_package()
 
@@ -21,7 +24,7 @@ include_directories(
 )
 
 add_executable(move src/ardrone.cpp)
-add_executable(test_cv src/test_cv.cpp)
+# add_executable(test_cv src/test_cv.cpp)
 target_link_libraries(move
   ${ar_cv_LIBRARIES}
   ${ardrone_control_LIBRARIES}
@@ -29,9 +32,9 @@ target_link_libraries(move
   ${CURSES_LIBRARIES}
 )
 
-target_link_libraries(test_cv
-  ${ar_cv_LIBRARIES}
-  ${ardrone_control_LIBRARIES}
-  ${catkin_LIBRARIES}
-  ${CURSES_LIBRARIES}
-)
+# target_link_libraries(test_cv
+#   ${ar_cv_LIBRARIES}
+#   ${ardrone_control_LIBRARIES}
+#   ${catkin_LIBRARIES}
+#   ${CURSES_LIBRARIES}
+# )

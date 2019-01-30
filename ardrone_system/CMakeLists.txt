@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 2.8.3)
 project(ardrone_system)
 
 ## Compile as C++11, supported in ROS Kinetic and newer
-# add_compile_options(-std=c++11)
+add_compile_options(-std=c++11)
 
 find_package(catkin REQUIRED COMPONENTS
   roscpp
@@ -24,7 +24,7 @@ include_directories(
 )
 
 add_executable(move src/ardrone.cpp)
-# add_executable(test_cv src/test_cv.cpp)
+add_executable(test_cv src/test_cv.cpp)
 target_link_libraries(move
   ${ar_cv_LIBRARIES}
   ${ardrone_control_LIBRARIES}
@@ -32,9 +32,9 @@ target_link_libraries(move
   ${CURSES_LIBRARIES}
 )
 
-# target_link_libraries(test_cv
-#   ${ar_cv_LIBRARIES}
-#   ${ardrone_control_LIBRARIES}
-#   ${catkin_LIBRARIES}
-#   ${CURSES_LIBRARIES}
-# )
+target_link_libraries(test_cv
+  ${ar_cv_LIBRARIES}
+  ${ardrone_control_LIBRARIES}
+  ${catkin_LIBRARIES}
+  ${CURSES_LIBRARIES}
+)

@@ -9,7 +9,6 @@ int BLUR_SIZE = 0;
 
 cv::Scalar circleColor(255, 255, 255), contourColor(0, 255, 0);
 //cv::Scalar minColor(98, 140, 140), maxColor(218, 255, 255);
-drone ar;
 DroneController ctrl(0.802, 0.1, 0.1, 0.1, 1280.0, 720.0);
 
 int main(int argc, char ** argv)

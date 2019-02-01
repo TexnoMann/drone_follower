@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<launch>
+	<rosparam ns="ar_cv" command="load" file="$(find ar_cv)/config/setup.yaml" />
+	<node pkg="ardrone_system" type="ardrone" name="ardrone"/>
+	<node pkg="ardrone_system" type="convenience" name="convenience" output="screen"/>
+</launch>

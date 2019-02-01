@@ -12,6 +12,7 @@ import threading
 
 ## Setup
 topicName = "/ardrone/front/image_raw"
+topicName = ""
 
 
 # Circle params

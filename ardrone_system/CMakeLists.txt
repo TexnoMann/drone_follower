@@ -11,10 +11,14 @@ find_package(catkin REQUIRED COMPONENTS
   ardrone_control
   ardrone_autonomy
   ar_cv
+  cv_bridge
+
 )
 find_package(Curses REQUIRED)
 
 find_package(OpenCV REQUIRED)
+
+find_package(Boost COMPONENTS system thread REQUIRED)
 
 catkin_package()
 
@@ -23,9 +27,9 @@ include_directories(
   ${catkin_INCLUDE_DIRS}
 )
 
-add_executable(move src/ardrone.cpp)
+add_executable(ardrone src/ardrone.cpp)
 add_executable(test_cv src/test_cv.cpp)
-target_link_libraries(move
+target_link_libraries(ardrone
   ${ar_cv_LIBRARIES}
   ${ardrone_control_LIBRARIES}
   ${catkin_LIBRARIES}
@@ -35,6 +39,12 @@ target_link_libraries(move
 target_link_libraries(test_cv
   ${ar_cv_LIBRARIES}
   ${ardrone_control_LIBRARIES}
+  ${catkin_LIBRARIES}
+  ${CURSES_LIBRARIES}
+)
+
+add_executable(convenience src/convenience.cpp)
+target_link_libraries(convenience
   ${catkin_LIBRARIES}
   ${CURSES_LIBRARIES}
 )

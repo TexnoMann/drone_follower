@@ -14,7 +14,7 @@ DroneController ctrl(0.802, 0.1, 0.1, 0.1, 1280.0, 720.0);
 int main(int argc, char ** argv)
 {
     ros::init(argc, argv, "test_drone_cv");
-    drone ar;
+    // drone ar;
     ros::NodeHandle nh;
     ros::AsyncSpinner spinner(2);
     spinner.start();
@@ -46,31 +46,33 @@ int main(int argc, char ** argv)
     cv::Scalar minColor(mincolor[0], mincolor[1], mincolor[2]),
                maxColor(maxcolor[0], maxcolor[1], maxcolor[2]);
 
-    if (info.topicName == "/ardrone/front/image_raw")
+    if (info.topicName == "")
         info.workMode = 2;      // Config for web camera
     else info.workMode = 3;     // Config for topic
 
-    std::vector<ar_cv::CircleInfo> circles;
-
+    std::vector<ar_cv::CircleInfo> circles;   
     SimpleCV cv(nh, info, freq);
-    cv::Mat image;
-    int ch ;
+    cv::Mat image; 
     while(ros::ok()) {
         image = cv.getImage().clone();
         if (!image.empty()) {
-
+        
             // Recognize circle with some accurancy
             circles = findCircles(image, minColor, maxColor, accurancy,
                 DILATION_SIZE, BLUR_SIZE, circleColor, contourColor);
 
             if (circles.size() > 0){
-
                 circlePublisher.publish(circles[0]);
 
                 std::vector<double> v=getCircleInfoForControl(circles[0]);
-                std::cout<<v[0]<<" "<<v[1]<<" "<<v[2]<<" "<<v[3]<<"\n";
+                std::cout <<"------------------------\n";
+                std::cout <<"\nTest Lesha's function\n";
+                std::cout<<"x: " << v[0]<<" y: "<<v[1]<<" z: "<<v[2]<<" rad: "<<v[3]<<"\n";
                 std::vector<double> desVector={2,0,-1,0};
-                ctrl.getVectorControl(1,v,0,0,desVector);
+                std::cout <<"\nTest Vlad's function\n";
+                std::vector<float> s = ctrl.getVectorControl(1,v,0,0,desVector);
+                std::cout<<"x: " << s[0]<<" y: "<<s[1]<<" z: "<<s[2]<<" zz: "<<s[3]<<"\n";
+                std::cout <<"------------------------\n";
                 //ar.drone_move(x,y,z,zz);
             }
 

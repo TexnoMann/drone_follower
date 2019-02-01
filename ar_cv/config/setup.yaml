@@ -2,10 +2,11 @@ dilation_size: 4
 blur_size: 10
 sigma: 0.1                    # accurancy of cirlce detection
 
-min_color: [98, 140, 140]
-max_color: [218, 255, 255]
+min_color: [0, 127, 43]
+max_color: [31, 255, 255]
 
 topic_name: "/ardrone/front/image_raw"
+# topic_name: "/ardrone/bottom/image_raw"
 #topic_name: ""
 camera_number: 0
 camera_frequency: 10

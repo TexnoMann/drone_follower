@@ -58,7 +58,6 @@ int main(int argc, char **argv){
 	ros::Publisher talk = n.advertise<std_msgs::Char>("talk",1);
 	initscr();
 	noecho();
-	drone ar(n);
 	halfdelay(1);
 	std_msgs::Char msg;
 	
@@ -71,8 +70,9 @@ int main(int argc, char **argv){
 		}
 		clear();
 		if (ch == 'x' && (state == 3 || state == 7)){
-		msg.data = 'l';
-		talk.publish(msg);}
+			msg.data = 'l';
+			talk.publish(msg);
+		}
 		ros::spinOnce();
 	}
 	endwin();

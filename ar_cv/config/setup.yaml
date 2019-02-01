@@ -1,6 +1,6 @@
 dilation_size: 4
 blur_size: 10
-sigma: 0.1                    # accurancy of cirlce detection
+sigma: 0.2                    # accurancy of cirlce detection
 
 min_color: [0, 127, 43]
 max_color: [31, 255, 255]

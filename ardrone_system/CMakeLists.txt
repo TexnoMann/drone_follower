@@ -14,6 +14,10 @@ find_package(catkin REQUIRED COMPONENTS
   cv_bridge
 
 )
+
+# Debug option
+ ADD_DEFINITIONS(-DDEBUG)
+ 
 find_package(Curses REQUIRED)
 
 find_package(OpenCV REQUIRED)
@@ -45,6 +49,14 @@ target_link_libraries(test_cv
 
 add_executable(convenience src/convenience.cpp)
 target_link_libraries(convenience
+  ${catkin_LIBRARIES}
+  ${CURSES_LIBRARIES}
+)
+
+add_executable(graph src/graph.cpp)
+target_link_libraries(graph
+  ${ar_cv_LIBRARIES}
+  ${ardrone_control_LIBRARIES}
   ${catkin_LIBRARIES}
   ${CURSES_LIBRARIES}
 )

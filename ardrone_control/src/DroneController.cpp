@@ -2,11 +2,13 @@
 
 
 DroneController::DroneController(double limAngleCamY,double limAngleCamZ, double Kx, double Ky, double Kz, double YSizeCam, double ZSizeCam){
-  this->_limAngleCamZ=limAngleCamZ;
-  this->_limAngleCamY=limAngleCamY;
+  this->_limAngleCamZ=limAngleCamZ*M_PI/180;
+  this->_limAngleCamY=limAngleCamY*M_PI/180;
   this->_Kx=Kx;
   this->_Ky=Ky;
   this->_Kz=Kz;
+  this->_alpha0 = limAngleCamY*M_PI/(180*YSizeCam);
+  this->_ball_radius=0.032;
   //Camera size in pixel
   this->_YSizeCam=YSizeCam;
   this->_ZSizeCam=ZSizeCam;
@@ -18,13 +20,13 @@ DroneController::DroneController(double limAngleCamY,double limAngleCamZ, double
   this->_xOffset=0.21;
 }
 
-std::vector<float> DroneController::getVectorControl(double heighDrone, std::vector<double> xyzrObjectV, double alphaDrone, double phiDrone, std::vector<double> desiredVector){
+std::vector<float> DroneController::getVectorControl(std::vector<double> xyzrObjectV, double alphaDrone, double phiDrone, std::vector<double> desiredVector){
 
   Eigen::Vector4d xyzrObject={xyzrObjectV[0],xyzrObjectV[1],xyzrObjectV[2],xyzrObjectV[3]};
   Eigen::Vector3d desV={desiredVector[0],desiredVector[1],desiredVector[2]};
 
   std::vector<float> controlv(4);
-  Eigen::Vector3d control=_controlMatrix*(desV-_getCurrentVector(heighDrone,xyzrObject,alphaDrone,phiDrone));
+  Eigen::Vector3d control=_controlMatrix*(_getCurrentVector(xyzrObject,alphaDrone,phiDrone)-desV);
   //Chech overcontrol
   for(int i=0; i<3;i++){
     if(abs(control[i])>_maxControlVector[i]){
@@ -35,29 +37,27 @@ std::vector<float> DroneController::getVectorControl(double heighDrone, std::vec
   controlv[3]=0.0;
 
   #ifdef DEBUG
-  std::cout<<controlv[0]<<"\n";
+  // std::cout<<controlv[0]<<"\n";
   #endif
   return controlv;
 }
 
 
 //Get vector to object of base frame on drone
-Eigen::Vector3d DroneController::_getCurrentVector(double heighDrone, Eigen::Vector4d xyzrObject, double alphaDrone, double phiDrone){
+Eigen::Vector3d DroneController::_getCurrentVector(Eigen::Vector4d xyzrObject, double alphaDrone, double phiDrone){
   Eigen::Vector3d currentVector;
-  // double angle_y=-((xyzrObject[1]+_YSizeCam/2)/_YSizeCam*_limAngleCam*2-_limAngleCam);
-  // double angle_x=-((xyzrObject[2]+_ZSizeCam/2)/_ZSizeCam*_limAngleCam*2-_limAngleCam);
 
-  double angle_z=(xyzrObject[2])/(_ZSizeCam/2)*_limAngleCamZ;
-  double angle_y=(xyzrObject[1])/(_YSizeCam/2)*_limAngleCamY;
-  double angle_yr=(xyzrObject[1]+xyzrObject[3])/(_YSizeCam/2)*_limAngleCamY;
+  double l =0.9827* _ball_radius/(sin(_alpha0*xyzrObject[3]/2)) - 0.1754;
+  currentVector[0]=l*cos(_alpha0*xyzrObject[2])*cos(_alpha0*xyzrObject[1])+cos(alphaDrone)*0.21;
+  currentVector[1]=l*sin(_alpha0*xyzrObject[1])*cos(_alpha0*xyzrObject[2]);
+  currentVector[2]=l*sin(_alpha0*xyzrObject[2])+sin(alphaDrone)*0.21;
 
-  currentVector[0]=xyzrObject[3]/(tan(angle_yr)-tan(angle_y))*cos(angle_z);
-  currentVector[1]=(currentVector[0]-_xOffset)*tan(angle_y);
-  currentVector[2]=currentVector[0]*tan(angle_z);
+  std::cout << l << "\n";
+
   #ifdef DEBUG
   std::cout<<"Vector for Object: \n"<<currentVector<<"\n";
   #endif
-  currentVector=_getTransformRotMatrix(alphaDrone, phiDrone).inverse()*currentVector;
+  currentVector=_getTransformRotMatrix(phiDrone, alphaDrone)*currentVector;
 
   return currentVector;
 }
